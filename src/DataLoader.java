@@ -1,23 +1,17 @@
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class DataVisualization {
-    public static void main(String[] args) {
-        String filePath = "All_Track_Lines_Final.csv"; // Update with actual file path
-        List<String[]> data = readData(filePath);
-
-        if (data.isEmpty()) {
-            System.out.println("No data found.");
-            return;
+public class DataLoader {
+    public static List<String[]> loadData(String filePath) {
+        try (Stream<String> lines = Files.lines(Paths.get(filePath))) {
+            return lines.map(line -> line.split(",")) // Split each line by comma
+                    .collect(Collectors.toList()); // Collect into a List
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Collections.emptyList(); // Return empty list on failure
         }
-
-        // Print details about specific entries
-        printDataDetails(data);
-
-        // Launch GUI
-        SwingUtilities.invokeLater(() -> createAndShowGUI(data));
     }
+}
