@@ -2,8 +2,8 @@ import javax.swing.*;
 import java.util.List;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-
-public class Main {
+//"src/All_Track_Lines_Final.csv"
+public class TablePanel {
     public static void main(String[] args) {
         String filePath = "src/All_Track_Lines_Final.csv"; // Ensure this path is correct
         List<String[]> data = DataLoader.loadData(filePath);
@@ -23,6 +23,6 @@ public class Main {
         DataProcessor.printDataDetails(headers, rows);
 
         SwingUtilities.invokeLater(() -> DataGUI.createAndShowGUI(headers, rows));
-        //commnt
+        //fix up
     }
 }
