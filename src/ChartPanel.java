@@ -1,12 +1,13 @@
 import javax.swing.*;
 import java.awt.*;
-import java.io.*;
-import java.nio.file.*;
-import java.util.*;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ChartPanel {
+class ChartPanel {
     public static void createChartFromCSV(String filePath) {
         List<String[]> data = loadData(filePath);
 
@@ -20,7 +21,7 @@ public class ChartPanel {
 
         JFrame frame = new JFrame("CSV Data Chart");
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        frame.setSize(600, 400);
+        frame.setSize(800, 600);
 
         JPanel panel = new JPanel() {
             @Override
@@ -29,10 +30,10 @@ public class ChartPanel {
 
                 int width = getWidth();
                 int height = getHeight();
-                int barWidth = width / rows.size();
-                int maxHeight = height - 50;
+                int padding = 10;
+                int barWidth = (width - (padding * (rows.size() + 1))) / rows.size();
+                int maxHeight = height - 100;
 
-                // Assuming numeric data in the second column
                 g.setColor(Color.BLUE);
                 try {
                     int maxValue = rows.stream()
@@ -44,10 +45,15 @@ public class ChartPanel {
                         int value = Integer.parseInt(rows.get(i)[1].trim());
                         int barHeight = (int) ((double) value / maxValue * maxHeight);
 
-                        g.fillRect(i * barWidth + 5, height - barHeight - 30, barWidth - 10, barHeight);
-                        g.setColor(Color.BLACK);
-                        g.drawString(rows.get(i)[0], i * barWidth + 10, height - 10);
+                        int x = padding + i * (barWidth + padding);
+                        int y = height - barHeight - 50;
+
                         g.setColor(Color.BLUE);
+                        g.fillRect(x, y, barWidth, barHeight);
+
+                        g.setColor(Color.BLACK);
+                        g.drawString(rows.get(i)[0], x, height - 30);
+                        g.drawString(String.valueOf(value), x, y - 5);
                     }
 
                 } catch (NumberFormatException ex) {
@@ -58,6 +64,7 @@ public class ChartPanel {
 
         frame.add(panel);
         frame.setVisible(true);
+        panel.repaint();
     }
 
     private static List<String[]> loadData(String filePath) {

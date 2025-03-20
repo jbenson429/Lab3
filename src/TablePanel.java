@@ -23,6 +23,6 @@ public class TablePanel {
         DataProcessor.printDataDetails(headers, rows);
 
         SwingUtilities.invokeLater(() -> DataGUI.createAndShowGUI(headers, rows));
-        //fix up
+
     }
 }
